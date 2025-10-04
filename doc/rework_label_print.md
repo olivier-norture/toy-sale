@@ -13,3 +13,19 @@ The following changes were made to the `web/stylesheets/label.css` file:
 ## Purpose
 
 The purpose of these changes is to ensure that the labels are printed in portrait orientation as requested by the user. This provides a better layout for the label content.
+
+## Price Position Change
+
+The position of the price on the label has been moved to the bottom right.
+
+### Changes
+
+- **`web/print_label.php`**:
+  - The HTML structure of the label was modified to separate the reference, description, and price into their own `div` elements.
+- **`web/stylesheets/label.css`**:
+  - The CSS was updated to position the price at the bottom of the label with right alignment.
+  - The `.label-ref-price` class was replaced by `.label-ref` and a new `.label-price` class was added.
+
+### Purpose
+
+This change was made to improve the layout of the label and place the price in a more logical position after the description.
