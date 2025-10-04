@@ -1,5 +1,11 @@
 FROM php:7.4-apache
 
+# Enable mod_rewrite
+RUN a2enmod rewrite
+
+# Configure Apache to allow .htaccess overrides
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
 # Configure PHP include_path
 RUN echo 'include_path = ".:/var/www/html"' > /usr/local/etc/php/conf.d/zz-custom.ini
 
