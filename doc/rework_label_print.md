@@ -29,3 +29,18 @@ The position of the price on the label has been moved to the bottom right.
 ### Purpose
 
 This change was made to improve the layout of the label and place the price in a more logical position after the description.
+
+## Font Size Change
+
+The font sizes on the label have been doubled.
+
+### Changes
+
+- **`web/stylesheets/label.css`**:
+  - The font size for `.label-ref` was changed from `12pt` to `24pt`.
+  - The font size for `.label-description` was changed from `8pt` to `16pt`.
+  - The font size for `.label-price` was changed from `12pt` to `24pt`.
+
+### Purpose
+
+This change was made to improve the readability of the label.
