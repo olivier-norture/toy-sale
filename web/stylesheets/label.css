@@ -5,7 +5,7 @@ html, body {
 }
 
 @page {
-    size: 30.48mm 62mm;
+    size: 62mm 50mm;
     margin: 0 !important;
 }
 
@@ -15,8 +15,8 @@ body {
 }
 
 .label-container {
-    width: 30.48mm;
-    height: 62mm;
+    width: 62mm;
+    height: 50mm;
     display: flex;
     flex-direction: column;
     padding: 2mm;
@@ -27,25 +27,25 @@ body {
 .label-ref {
     width: 100%;
     font-family: Arial;
-    font-size: 12pt;
+    font-size: 18pt;
     flex-shrink: 0;
     font-weight: bold;
 }
 
 .label-description {
     font-family: Arial;
-    font-size: 8pt;
+    font-size: 12pt;
     text-align: justify;
     overflow: hidden;
     flex-grow: 1;
     white-space: normal;
     word-wrap: break-word;
-    margin-top: 1mm;
+    margin-top: 5mm;
 }
 
 .label-price {
     font-family: Arial;
-    font-size: 24pt;
+    font-size: 14pt;
     font-weight: bold;
     text-align: right;
     width: 100%;
