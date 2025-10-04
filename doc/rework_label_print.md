@@ -44,3 +44,16 @@ The font sizes on the label have been doubled.
 ### Purpose
 
 This change was made to improve the readability of the label.
+
+## Line Feed Addition
+
+A line feed has been added between the object reference and the description.
+
+### Changes
+
+- **`web/stylesheets/label.css`**:
+  - A `margin-top` of `1mm` was added to the `.label-description` class.
+
+### Purpose
+
+This change was made to improve the visual separation between the object reference and the description.
