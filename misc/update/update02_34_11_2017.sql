@@ -1,0 +1,1 @@
+alter table participant set TEL varchar(30) DEFAULT NULL;

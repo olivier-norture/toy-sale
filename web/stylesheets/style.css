@@ -1,0 +1,122 @@
+.labelInfo{
+    display: inline-block;
+    padding: 1em;
+    font-size: 1.2em;
+}
+
+.labelInfoTitle{
+    font-weight: bold;
+}
+
+button {
+    display: inline-block;
+    background: url(../images/submit_button.png) no-repeat;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    height: 60px;
+    padding: 3px 0 0px 35px;
+    width: 163px;
+}
+
+#button {
+    display: inline-block;
+    background: url(../images/submit_button.png) no-repeat;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    height: 60px;
+    padding: 3px 0 0px 35px;
+    width: 163px;
+}
+
+div.center{
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    margin-left: -100px; /* Cette valeur doit être la moitié négative de la valeur du width */
+    margin-top: -100px; /* Cette valeur doit être la moitié négative de la valeur du height */
+}
+
+td{
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.notPrintable{}
+
+.onlyPrintable{display: none;}
+
+.signature{
+    padding: 1em;
+    font-size: 1.5em;
+    height: 250px;
+    text-align: left;
+}
+
+textarea{
+    /*padding: 1em;*/
+    width: 400px;
+    height: 50px;
+    border: none;
+    resize: none;
+    overflow:hidden;
+    font-size: 18px;
+}
+
+.errorMessage{
+    margin-top: 1em;
+    padding: 1em;
+    border: solid 3px red;
+    /*background-color: rgba(255,0,0,0.5);*/
+    /*background-color: lightgray;*/
+    font-size: 1.3em;
+    text-align: center;
+    height: 60px;
+}
+
+.errorMessage img{
+    display: inline-block;
+    height: 60px; 
+}
+
+.errorMessage div{
+    display: inline-block;
+}
+
+table{
+    width: 100%;
+}
+
+td{
+    height: 2em;
+}
+
+table .reference{
+    width: 150px;
+}
+
+table .prix{
+    width: 150px;
+}
+
+/*.add{
+    background: url(../images/plus-icon.png) no-repeat;
+    background-size: 20%;
+    background-position-y: 0.8em;
+}
+
+.edit{
+    background: url(../images/icon_edit.png) no-repeat;
+    background-position-y: 0.5em;
+}*/
+
+input[type="text"]:disabled {
+    background: none;
+    color: black;
+    cursor: pointer;
+}

@@ -1,0 +1,1 @@
+alter table bill add creditCard INTEGER DEFAULT NULL;

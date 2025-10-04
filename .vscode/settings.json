@@ -1,0 +1,4 @@
+{
+    "php.version": "8.4",
+    "nixEnvSelector.nixFile": "${workspaceFolder}/shell.nix"
+}
