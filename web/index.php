@@ -55,7 +55,7 @@ $page->process(false);
                     <label>Ce PC est identifié avec la lettre : " <b><?php echo $page->getLetter() ?></b> "</label>
                     <br />
                     <br />
-                    <label>L'adresse IP de ce PC est : " <b><?php echo $_SERVER['REMOTE_ADDR']; ?></b> "</label>
+                    <label>L'adresse IP de ce PC est : " <b><?php echo array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']; ?></b> "</label>
                     <br />
                     <br />
                     <br />
