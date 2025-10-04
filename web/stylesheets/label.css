@@ -19,7 +19,7 @@ body {
     height: 80mm;
     display: flex;
     flex-direction: column;
-    padding: 2mm;
+    padding: 1em;
     box-sizing: border-box;
     overflow: hidden;
 }
