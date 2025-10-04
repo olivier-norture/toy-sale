@@ -34,17 +34,14 @@ $description = $objet->getDescription();
     <script type="text/javascript">
         window.onload = function() {
             window.print();
-            window.close();
         }
     </script>
 </head>
 <body>
     <div class="label-container">
-        <div class="label-ref-price">
-            <div><?php echo htmlspecialchars($objet->getRef()); ?></div>
-            <div><?php echo htmlspecialchars(number_format($objet->getPrix(), 2, ',', '') . '€'); ?></div>
-        </div>
+        <div class="label-ref"><?php echo htmlspecialchars($objet->getRef()); ?></div>
         <div class="label-description"><?php echo htmlspecialchars($description); ?></div>
+        <div class="label-price"><?php echo htmlspecialchars(number_format($objet->getPrix(), 2, ',', '') . '€'); ?></div>
     </div>
 </body>
 </html>
