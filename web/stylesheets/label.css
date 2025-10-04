@@ -40,6 +40,7 @@ body {
     flex-grow: 1;
     white-space: normal;
     word-wrap: break-word;
+    margin-top: 1mm;
 }
 
 .label-price {
