@@ -14,25 +14,16 @@ spl_autoload_register(function ($class) {
 use classes\db\object\Objet;
 
 $objet = null;
-$description = '';
-$price = '';
-$ref = '';
-
 if (isset($_GET['objet_id'])) {
     $objet_id = $_GET['objet_id'];
     $objet = Objet::searchPk($objet_id);
-    if ($objet) {
-        $description = $objet->getDescription();
-        $price = $objet->getPrix();
-        $ref = $objet->getRef();
-    }
-} elseif (isset($_GET['description']) && isset($_GET['price']) && isset($_GET['ref'])) {
-    $description = $_GET['description'];
-    $price = $_GET['price'];
-    $ref = $_GET['ref'];
-} else {
-    die('No data provided.');
 }
+
+if ($objet === null) {
+    die('Objet not found.');
+}
+
+$description = $objet->getDescription();
 
 ?>
 <!DOCTYPE html>
@@ -49,9 +40,9 @@ if (isset($_GET['objet_id'])) {
 </head>
 <body>
     <div class="label-container">
-        <div class="label-ref"><?php echo htmlspecialchars($ref); ?></div>
+        <div class="label-ref"><?php echo htmlspecialchars($objet->getRef()); ?></div>
         <div class="label-description"><?php echo htmlspecialchars($description); ?></div>
-        <div class="label-price"><?php echo htmlspecialchars(number_format($price, 2, ',', '') . '€'); ?></div>
+        <div class="label-price"><?php echo htmlspecialchars(number_format($objet->getPrix(), 2, ',', '') . '€'); ?></div>
     </div>
 </body>
 </html>

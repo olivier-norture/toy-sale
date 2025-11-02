@@ -55,16 +55,7 @@ $page->process();
                 window.open('print_label.php?objet_id=' + objetId, '_blank', 'width=62mm,height=30.48mm,resizable=yes,scrollbars=yes,status=yes');
             }
 
-            function addAndPrintLabel() {
-                const description = document.getElementById('description').value;
-                const price = document.getElementsByName('prix')[0].value;
-                const ref = document.querySelector('tr.notPrintable > td > label').innerText;
-
-                const url = `print_label.php?description=${encodeURIComponent(description)}&price=${encodeURIComponent(price)}&ref=${encodeURIComponent(ref)}`;
-                window.open(url, '_blank', 'width=62mm,height=30.48mm,resizable=yes,scrollbars=yes,status=yes');
-
-                return true;
-            }
+            
         </script>
 
     </head>
@@ -108,7 +99,7 @@ $page->process();
                                         <td><label><?php echo classes\db\object\objetUtils::getNextRef($page->getAcheteur(), $page->getLetter()); ?></label></td>
                                         <td><textarea autofocus name="description" id="description" class="textarea" onkeydown="setTextareaHeight(this);"></textarea>
                                             <td><input type="text" name="prix" value="" style="height: 100%; width: 100%;"/></td>
-                                            <td class="notPrintable"><button class="add" name="action" type="submit" value="add" onclick="return addAndPrintLabel()">Enregistrer</button></td>
+                                            <td class="notPrintable"><button class="add" name="action" type="submit" value="add">Enregistrer</button></td>
                                             <td class="notPrintable"></td>
                                             <td class="notPrintable"></td>
                                     </tr>
