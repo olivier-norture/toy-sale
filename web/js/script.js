@@ -9,24 +9,8 @@ async function imprimer_page(){
     removeBorder();
     initTextArea();
     changeFontSize(12);
-    // Use a promise to wait for the print dialog to be closed
-    await new Promise(resolve => {
-        let printed = false;
-        const afterPrint = () => {
-            if (!printed) {
-                printed = true;
-                resolve();
-            }
-        };
-
-        window.onafterprint = afterPrint;
-        window.print();
-
-        // Fallback for browsers that don't support onafterprint
-        setTimeout(() => {
-            afterPrint();
-        }, 3000);
-    });
+    window.print();
+    await sleep(3000);
 }
 
 function cancel_print(){
