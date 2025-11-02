@@ -73,6 +73,7 @@ class DepotJouet extends Page {
                 $objet->setDateDepot(Date::getCurrentDateAndTime());
                 $objet->save();
                 $this->basket->update($objet);
+                $this->getSession()->set('updated_object_id', $id);
             }
             elseif($_POST["action"] == "saveAndPrint"){
                 if($this->saveAndPrint()){
@@ -88,6 +89,12 @@ class DepotJouet extends Page {
             $this->bill = Bill::search($billId);
             $this->basket = $this->bill->getBasket();
             $this->getSession()->saveBill($this->bill);
+        }
+        elseif(isset($_GET['clear_new_object_id'])){
+            $this->getSession()->remove('new_object_id');
+        }
+        elseif(isset($_GET['clear_updated_object_id'])){
+            $this->getSession()->remove('updated_object_id');
         }
         
         //Show a message if the current bill isn't active
@@ -151,6 +158,7 @@ class DepotJouet extends Page {
         
         $objet->save();
         $this->basket->add($objet);
+        $this->getSession()->set('new_object_id', $objet->getPk());
     }
     
     public function getTotalSize(){

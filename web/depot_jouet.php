@@ -35,6 +35,20 @@ $page->process();
                     await imprimer_page();
                     window.location.replace('<?php echo Constants::$PAGE_DEPOT . "?clear_session&depot" ?>');
                 }
+                <?php 
+                    $new_object_id = $page->getSession()->get('new_object_id');
+                    if (isset($new_object_id)) { 
+                ?>
+                    printLabel(<?php echo $new_object_id; ?>);
+                    window.location.replace('<?php echo Constants::$PAGE_DEPOT . "?clear_new_object_id" ?>');
+                <?php 
+                    }
+                    $updated_object_id = $page->getSession()->get('updated_object_id');
+                    if (isset($updated_object_id)) { 
+                ?>
+                    printLabel(<?php echo $updated_object_id; ?>);
+                    window.location.replace('<?php echo Constants::$PAGE_DEPOT . "?clear_updated_object_id" ?>');
+                <?php } ?>
             }
 
             function printLabel(objetId) {
