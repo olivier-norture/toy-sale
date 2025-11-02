@@ -56,7 +56,7 @@ class DepotJouet extends Page {
             //If the action is "add" so we have to add the new object
             if ($_POST["action"] == "add" && !empty($_POST["description"]) && !empty($_POST["prix"])) {
                     $this->addObject();
-                    header("Location: ".Constants::getPath(Constants::$PAGE_DEPOT));
+                    header("Location: " . Constants::getPath(Constants::$PAGE_DEPOT));
             }
             //If the action is "del-8", so we have to remove the objet with "pk = 8"
             elseif (substr($_POST["action"], 0, 3) == "del") {
@@ -88,6 +88,9 @@ class DepotJouet extends Page {
             $this->bill = Bill::search($billId);
             $this->basket = $this->bill->getBasket();
             $this->getSession()->saveBill($this->bill);
+        }
+        elseif(isset($_GET['clear_new_object_id'])){
+            $this->getSession()->remove('new_object_id');
         }
         
         //Show a message if the current bill isn't active
@@ -151,6 +154,7 @@ class DepotJouet extends Page {
         
         $objet->save();
         $this->basket->add($objet);
+        $this->getSession()->set("new_object_id", $objet->getPk());
     }
     
     public function getTotalSize(){
