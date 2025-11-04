@@ -29,3 +29,11 @@ Even with the previous fixes, requests made from the host machine (e.g. `curl lo
 To solve this for the development environment, the `docker-compose.yml` file was modified to use `network_mode: "host"` for the `app` service.
 
 This makes the application share the host's network stack, and it will see the real client IP address. As a consequence, the application is now accessible on port 80 of the host, not 8080.
+
+### Fourth fix
+
+Using `network_mode: "host"` caused a new issue where the `app` service could no longer resolve the `db` service hostname.
+
+To fix this, the `docker-compose.yml` was modified again:
+- The `db` service now exposes port 3306 to the host.
+- The `app` service now connects to the database using `127.0.0.1` as the host instead of `db`.
