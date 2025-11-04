@@ -216,7 +216,7 @@ abstract class Page{
         $this->pc = $this->session->getPc();
         
         if($this->pc == null){
-            $this->pc = PC::search($_SERVER['REMOTE_ADDR']);
+            $this->pc = PC::search(array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER) ? explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0] : $_SERVER['REMOTE_ADDR']);
             $this->session->savePc($this->pc);
         }
     }
