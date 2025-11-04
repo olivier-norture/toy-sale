@@ -3,8 +3,9 @@ version: '3.8'
 services:
   app:
     build: .
-    ports:
-      - "8080:80"
+    # The ports mapping is ignored when network_mode is host.
+    # The application will be accessible on port 80 of the host.
+    network_mode: "host"
     depends_on:
       - db
     environment:
