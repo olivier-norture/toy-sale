@@ -34,6 +34,6 @@ This makes the application share the host's network stack, and it will see the r
 
 Using `network_mode: "host"` caused a new issue where the `app` service could no longer resolve the `db` service hostname.
 
-To fix this, the `docker-compose.yml` was modified again:
+To fix this, the `docker-compose.yml` and `docker-compose.windows.yml` files were modified again:
 - The `db` service now exposes port 3306 to the host.
 - The `app` service now connects to the database using `127.0.0.1` as the host instead of `db`.
