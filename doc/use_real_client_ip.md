@@ -21,3 +21,11 @@ It appeared that the `X-Forwarded-For` header could contain a comma-separated li
 The files `classes/pages/page.php` and `web/index.php` were modified to parse the `X-Forwarded-For` header and take only the first IP address in the list.
 
 This is done by using `explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]`.
+
+### Third fix
+
+Even with the previous fixes, requests made from the host machine (e.g. `curl localhost:8080`) were still showing the Docker bridge IP address.
+
+To solve this for the development environment, the `docker-compose.yml` file was modified to use `network_mode: "host"` for the `app` service.
+
+This makes the application share the host's network stack, and it will see the real client IP address. As a consequence, the application is now accessible on port 80 of the host, not 8080.
