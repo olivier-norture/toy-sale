@@ -1,4 +1,3 @@
-
 # Fix: Use X-Forwarded-For header to get real client IP
 
 ## Purpose
@@ -7,8 +6,18 @@ This change fixes an issue where the application would always see the Docker gat
 
 ## Changes
 
+### First fix
+
 The file `classes/pages/page.php` was modified to use the `X-Forwarded-For` HTTP header to determine the client's IP address. This header is commonly added by reverse proxies to carry the original client IP address.
 
 The code now checks for the existence of `$_SERVER['HTTP_X_FORWARDED_FOR']` and uses it if it's available. Otherwise, it falls back to `$_SERVER['REMOTE_ADDR']`.
 
 This ensures that the application can correctly identify individual computers by their unique IP addresses, even when running behind a reverse proxy like Docker's networking layer.
+
+### Second fix
+
+It appeared that the `X-Forwarded-For` header could contain a comma-separated list of IP addresses. The previous fix was not correctly handling this case.
+
+The files `classes/pages/page.php` and `web/index.php` were modified to parse the `X-Forwarded-For` header and take only the first IP address in the list.
+
+This is done by using `explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]`.
