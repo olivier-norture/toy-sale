@@ -37,3 +37,9 @@ Using `network_mode: "host"` caused a new issue where the `app` service could no
 To fix this, the `docker-compose.yml` and `docker-compose.windows.yml` files were modified again:
 - The `db` service now exposes port 3306 to the host.
 - The `app` service now connects to the database using `127.0.0.1` as the host instead of `db`.
+
+### Note on IPv6 and `::1`
+
+After applying these changes, when accessing the application from `localhost`, the client IP address may be reported as `::1`. This is the IPv6 equivalent of the `127.0.0.1` loopback address. This is normal behavior on systems that have IPv6 enabled and prefer it for local connections.
+
+To force the connection to use IPv4 and see `127.0.0.1` as the IP address, you should access the application using `http://127.0.0.1` directly in your browser or client.
