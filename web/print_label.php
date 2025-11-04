@@ -34,7 +34,12 @@ $description = $objet->getDescription();
     <script type="text/javascript">
         window.onload = function() {
             window.print();
+            <?php if (isset($_GET['redirect_url']) && !empty($_GET['redirect_url'])):
+            ?>
+            setTimeout(function() { window.location.href = '<?php echo htmlspecialchars($_GET['redirect_url']); ?>'; }, 100);
+            <?php else: ?>
             setTimeout(function() { window.close(); }, 100);
+            <?php endif; ?>
         }
     </script>
 </head>

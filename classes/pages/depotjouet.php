@@ -55,8 +55,9 @@ class DepotJouet extends Page {
         if (!empty($_POST["action"])) {
             //If the action is "add" so we have to add the new object
             if ($_POST["action"] == "add" && !empty($_POST["description"]) && !empty($_POST["prix"])) {
-                    $this->addObject();
-                    header("Location: ".Constants::getPath(Constants::$PAGE_DEPOT));
+                    $objet = $this->addObject();
+                    header("Location: print_label.php?objet_id=" . $objet->getPk() . "&redirect_url=" . urlencode(Constants::getPath(Constants::$PAGE_DEPOT)));
+                    exit();
             }
             //If the action is "del-8", so we have to remove the objet with "pk = 8"
             elseif (substr($_POST["action"], 0, 3) == "del") {
@@ -151,6 +152,7 @@ class DepotJouet extends Page {
         
         $objet->save();
         $this->basket->add($objet);
+        return $objet;
     }
     
     public function getTotalSize(){
