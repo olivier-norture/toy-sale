@@ -34,6 +34,7 @@ $description = $objet->getDescription();
     <script type="text/javascript">
         window.onload = function() {
             window.print();
+            setTimeout(function() { window.close(); }, 100);
         }
     </script>
 </head>
