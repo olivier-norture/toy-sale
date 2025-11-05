@@ -35,16 +35,12 @@
                     <p><strong>Date:</strong> 05/11/2025</p>
                 </div>
                 
-                <div class="print-content-group">
-                    <table class="print-table-section">
-                        <thead class="print-table-header">
-                            <tr>
-                                <td id="entete_tableau"><label class="reference">RÉFÉRENCE</label></td>
-                                <td id="entete_tableau" style="width: 100%;"><label>DESCRIPTION</label></td>
-                                <td id="entete_tableau"><label class="prix">PRIX (€)</label></td>
-                            </tr>
-                        </thead>
-                        <tbody><tr>
+                <table>
+                    <tr>
+                        <td id="entete_tableau"><label class="reference">RÉFÉRENCE</label></td>
+                        <td id="entete_tableau" style="width: 100%;"><label>DESCRIPTION</label></td>
+                        <td id="entete_tableau"><label class="prix">PRIX (€)</label></td>
+                    </tr><tr>
                 <td>A001</td>
                 <td><textarea class="textarea">Voiture télécommandée rouge Ferrari avec télécommande</textarea></td>
                 <td>5</td>
@@ -245,16 +241,12 @@
                 <td><textarea class="textarea">Jeu d'échecs en bois avec échiquier</textarea></td>
                 <td>45</td>
             </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr class="print-total-row">
-                                <td id="entete_tableau">Total</td>
-                                <td><label>50 jouet(s)</label></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                    <tr>
+                        <td id="entete_tableau">Total</td>
+                        <td><label>50 jouet(s)</label></td>
+                        <td></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
@@ -284,9 +276,6 @@
         document.addEventListener("DOMContentLoaded", function() {
             hideNotPrintableElements();
             hideOnlyPrintableElements(false);
-            optimizePrintLayout();
-            addPrintContentGrouping();
-            optimizeTableForPrint();
         });
     </script>
 </body>

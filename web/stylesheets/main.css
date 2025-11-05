@@ -946,6 +946,19 @@ p#copyright {
         font-size: 11px !important;
     }
     
+    /* Header cells - restore original blue color */
+    #entete_tableau {
+        background-color: #CED8F6 !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        padding: 10px 5px !important;
+    }
+    
+    /* Description column - ensure it takes full available width */
+    table td[style*="width: 100%"] {
+        width: 100% !important;
+    }
+    
     /* Header row - prevent it from appearing alone */
     table thead tr,
     table tr:first-child {
