@@ -69,38 +69,43 @@ $page->process();
                         <form action="#" method="post" id="contact_form">
                             <fieldset> 
                                 <h2 id="jouet" class="notPrintable">LISTE DES JOUETS A D&Eacute;POSER</h2>
-                                <table> <!-- Tableau des jouets à ajouter 10 max -->
-                                        <tr>
-                                        <td id="entete_tableau"> <label class="reference">R&Eacute;F&Eacute;RENCE </label> </td>
-                                        <td id="entete_tableau" style="width: 100%;"> <label>DESCRIPTION</label> </td>
-                                        <td id="entete_tableau"> <label class="prix">PRIX (€)</label> </td>
-                                        <td id="entete_tableau" class="notPrintable"> <label for="edit"> </label> </td>
-                                        <td id="entete_tableau" class="notPrintable"> <label for="print"> </label> </td>
-                                        <td id="entete_tableau" class="notPrintable"> <label for="save"> </label> </td>
-                                        </tr>
+                                <div class="print-content-group">
+                                    <table class="print-table-section"> <!-- Tableau des jouets à ajouter 10 max -->
+                                        <thead class="print-table-header">
+                                            <tr>
+                                            <td id="entete_tableau"> <label class="reference">R&Eacute;F&Eacute;RENCE </label> </td>
+                                            <td id="entete_tableau" style="width: 100%;"> <label>DESCRIPTION</label> </td>
+                                            <td id="entete_tableau"> <label class="prix">PRIX (€)</label> </td>
+                                            <td id="entete_tableau" class="notPrintable"> <label for="edit"> </label> </td>
+                                            <td id="entete_tableau" class="notPrintable"> <label for="print"> </label> </td>
+                                            <td id="entete_tableau" class="notPrintable"> <label for="save"> </label> </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr  class="notPrintable">
+                                                <td><label><?php echo classes\db\object\objetUtils::getNextRef($page->getAcheteur(), $page->getLetter()); ?></label></td>
+                                                <td><textarea autofocus name="description" id="description" class="textarea" onkeydown="setTextareaHeight(this);"></textarea>
+                                                    <td><input type="text" name="prix" value="" style="height: 100%; width: 100%;"/></td>
+                                                    <td class="notPrintable"><button class="add" name="action" type="submit" value="add">Enregistrer</button></td>
+                                                    <td class="notPrintable"></td>
+                                                    <td class="notPrintable"></td>
+                                            </tr>
 
-                                    <tr  class="notPrintable">
-                                        <td><label><?php echo classes\db\object\objetUtils::getNextRef($page->getAcheteur(), $page->getLetter()); ?></label></td>
-                                        <td><textarea autofocus name="description" id="description" class="textarea" onkeydown="setTextareaHeight(this);"></textarea>
-                                            <td><input type="text" name="prix" value="" style="height: 100%; width: 100%;"/></td>
-                                            <td class="notPrintable"><button class="add" name="action" type="submit" value="add">Enregistrer</button></td>
-                                            <td class="notPrintable"></td>
-                                            <td class="notPrintable"></td>
-                                    </tr>
-
-                                    <!-- Display all objets -->
-                                    <?php $page->renderTab(); ?>
-
-                                    <tr>
-                                        <td id="entete_tableau">Total</td>
-                                        <td><label><?php echo $page->getTotalSize() ?> jouet(s)</label></td>
-                                        <td></td>
-                                        <td class="notPrintable"></td>
-                                        <td class="notPrintable"></td>
-                                        <td class="notPrintable"></td>
-                                    </tr>
-
-                                </table>
+                                            <!-- Display all objets -->
+                                            <?php $page->renderTab(); ?>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="print-total-row">
+                                                <td id="entete_tableau">Total</td>
+                                                <td><label><?php echo $page->getTotalSize() ?> jouet(s)</label></td>
+                                                <td></td>
+                                                <td class="notPrintable"></td>
+                                                <td class="notPrintable"></td>
+                                                <td class="notPrintable"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </fieldset>
 
 
