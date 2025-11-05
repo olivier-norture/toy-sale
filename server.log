@@ -1,0 +1,13 @@
+127.0.0.1 - - [05/Nov/2025 09:56:23] "GET /test_print_layout.html HTTP/1.1" 200 -
+10.2.70.64 - - [05/Nov/2025 09:56:29] "GET /test_print_layout.html HTTP/1.1" 200 -
+10.2.70.64 - - [05/Nov/2025 09:56:29] code 404, message File not found
+10.2.70.64 - - [05/Nov/2025 09:56:29] "GET /web/stylesheets/style.css HTTP/1.1" 404 -
+10.2.70.64 - - [05/Nov/2025 09:56:29] code 404, message File not found
+10.2.70.64 - - [05/Nov/2025 09:56:29] code 404, message File not found
+10.2.70.64 - - [05/Nov/2025 09:56:29] code 404, message File not found
+10.2.70.64 - - [05/Nov/2025 09:56:29] "GET /web/images/logo.png HTTP/1.1" 404 -
+10.2.70.64 - - [05/Nov/2025 09:56:29] "GET /web/js/script.js HTTP/1.1" 404 -
+10.2.70.64 - - [05/Nov/2025 09:56:29] "GET /web/stylesheets/main.css HTTP/1.1" 404 -
+10.2.70.64 - - [05/Nov/2025 09:56:29] code 404, message File not found
+10.2.70.64 - - [05/Nov/2025 09:56:29] "GET /web/images/logo.png HTTP/1.1" 404 -
+10.2.70.64 - - [05/Nov/2025 09:57:00] "GET /depot_jouet.php HTTP/1.1" 200 -

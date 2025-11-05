@@ -908,8 +908,8 @@ p#copyright {
     @page {
         size: A4;
         margin: 15mm 10mm 15mm 10mm;
-        orphans: 3;
-        widows: 3;
+        orphans: 2;
+        widows: 2;
     }
     
     /* Hide non-printable elements */
@@ -930,98 +930,44 @@ p#copyright {
         background: white !important;
     }
     
-    /* Remove margins and padding for print */
-    .container {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        max-width: none !important;
-    }
-    
-    #main_content {
-        margin: 0 !important;
-        padding: 0 !important;
-        font-size: 12px !important;
-    }
-    
-    #contact_area {
-        margin: 0 !important;
-        padding: 0 !important;
-        background: none !important;
-        border: none !important;
-    }
-    
-    /* Print header styling */
-    .print-header {
-        page-break-after: avoid;
-        page-break-inside: avoid;
-        break-after: avoid;
-        break-inside: avoid;
-        margin-bottom: 10px;
-        min-height: 80px;
-    }
-    
-    .print-header img {
-        max-height: 60px !important;
-        width: auto !important;
-    }
-    
-    /* Participant info and bill number */
-    .print-participant-info {
-        page-break-after: avoid;
-        break-after: avoid;
-        margin-bottom: 15px;
-        min-height: 40px;
-    }
-    
-    /* Table styling for better print layout */
+    /* Basic table styling - keep it simple */
     table {
         width: 100% !important;
         border-collapse: collapse !important;
-        page-break-inside: auto;
-        break-inside: auto;
+        font-size: 11px !important;
         margin: 0 !important;
+    }
+    
+    /* Table cells */
+    table td, table th {
+        padding: 3px 5px !important;
+        border: 1px solid #ddd !important;
+        vertical-align: top !important;
         font-size: 11px !important;
     }
     
-    /* Table header - keep with content */
-    table thead,
+    /* Header row - prevent it from appearing alone */
+    table thead tr,
     table tr:first-child {
         page-break-after: avoid;
         break-after: avoid;
+    }
+    
+    /* Individual table rows - prevent splitting within a row */
+    table tr {
         page-break-inside: avoid;
         break-inside: avoid;
     }
     
-    /* Table rows - prevent splitting */
-    table tr {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        page-break-after: auto;
-        break-after: auto;
-        min-height: 25px;
-    }
-    
-    /* Table cells */
-    table td {
-        padding: 3px 5px !important;
-        border: 1px solid #ddd !important;
-        vertical-align: top !important;
-        word-wrap: break-word !important;
-        font-size: 11px !important;
-    }
-    
-    /* Header cells */
-    #entete_tableau {
-        background-color: #f0f0f0 !important;
+    /* Total row - keep with previous content */
+    table tr:last-child {
+        page-break-before: avoid;
+        break-before: avoid;
         font-weight: bold !important;
-        text-align: center !important;
-        padding: 5px !important;
-        page-break-after: avoid;
-        break-after: avoid;
+        background-color: #f8f8f8 !important;
     }
     
-    /* Toy description cells - allow wrapping but prevent splitting */
+    /* Textarea in table cells */
     table td textarea {
         border: none !important;
         background: transparent !important;
@@ -1030,118 +976,16 @@ p#copyright {
         font-size: 11px !important;
         padding: 0 !important;
         margin: 0 !important;
-        overflow: visible !important;
-        height: auto !important;
-        min-height: 20px !important;
     }
     
-    /* Total row styling */
-    table tr:last-child {
-        page-break-before: avoid;
-        break-before: avoid;
-        font-weight: bold !important;
-        background-color: #f8f8f8 !important;
-    }
-    
-    /* Print footer styling */
-    .print-footer {
-        page-break-before: avoid;
-        break-before: avoid;
-        page-break-inside: avoid;
-        break-inside: avoid;
-        margin-top: 20px;
-        min-height: 150px;
-    }
-    
+    /* Footer section - keep together */
     .signature {
-        font-size: 11px !important;
-        padding: 10px 0 !important;
-        height: auto !important;
-        min-height: 120px;
-    }
-    
-    /* Ensure content grouping */
-    .print-content-group {
-        page-break-inside: avoid;
-        break-inside: avoid;
-        margin-bottom: 10px;
-    }
-    
-    /* Header with minimum content */
-    .print-header-group {
-        page-break-after: avoid;
-        break-after: avoid;
-        page-break-inside: avoid;
-        break-inside: avoid;
-        min-height: 200px; /* Ensure header appears with some content */
-    }
-    
-    /* Footer with minimum content */
-    .print-footer-group {
         page-break-before: avoid;
         break-before: avoid;
         page-break-inside: avoid;
         break-inside: avoid;
-        min-height: 200px; /* Ensure footer appears with some content */
-    }
-    
-    /* Table section grouping */
-    .print-table-section {
-        page-break-inside: auto;
-        break-inside: auto;
-    }
-    
-    /* Prevent orphaned table headers */
-    .print-table-header {
-        page-break-after: avoid;
-        break-after: avoid;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-    
-    /* Group table rows in chunks to prevent bad breaks */
-    .print-table-chunk {
-        page-break-inside: avoid;
-        break-inside: avoid;
-        page-break-after: auto;
-        break-after: auto;
-    }
-    
-    /* Specific Chrome print optimizations */
-    @supports (-webkit-appearance: none) {
-        table tr {
-            -webkit-column-break-inside: avoid;
-            -webkit-page-break-inside: avoid;
-        }
-        
-        .print-header-group,
-        .print-footer-group {
-            -webkit-column-break-inside: avoid;
-            -webkit-page-break-inside: avoid;
-        }
-    }
-    
-    /* Hide any remaining UI elements */
-    button, input[type="submit"], input[type="button"] {
-        display: none !important;
-    }
-    
-    /* Optimize spacing */
-    h2 {
-        margin: 10px 0 5px 0 !important;
-        font-size: 14px !important;
-    }
-    
-    fieldset {
-        border: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    
-    /* Ensure proper text rendering */
-    * {
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
+        font-size: 11px !important;
+        margin-top: 20px;
     }
 }
 

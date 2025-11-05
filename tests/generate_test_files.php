@@ -7,8 +7,16 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/PrintLayoutTest.php';
 
-// Create test instance
+// Create test instance using reflection to access private properties
 $test = new PrintLayoutTest();
+$reflection = new ReflectionClass($test);
+$method = $reflection->getMethod('setUp');
+$method->setAccessible(true);
+$method->invoke($test);
+
+$property = $reflection->getProperty('testToys');
+$property->setAccessible(true);
+$testToys = $property->getValue($test);
 
 // Generate test files for different toy quantities
 $quantities = [10, 50, 100];
@@ -17,7 +25,7 @@ foreach ($quantities as $quantity) {
     echo "Generating test file for $quantity toys...\n";
     
     $filename = __DIR__ . "/test_print_layout_{$quantity}_toys.html";
-    $test->generateTestHTML(array_slice($test->testToys, 0, $quantity), $filename);
+    $test->generateTestHTML(array_slice($testToys, 0, $quantity), $filename);
     
     echo "Generated: $filename\n";
 }
