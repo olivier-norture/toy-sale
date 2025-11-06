@@ -47,10 +47,6 @@ tr{
 .container, #latest_works, #bottom_content, #download {
     margin-left: 100px;
     margin-right: 100px;
-    /*margin: auto;*/
-    /*width: 1000px;*/
-    /*min-width: 1000px;*/
-    display: inline-block;
     text-align: left;
     page-break-before: avoid;
     break-before: avoid;
