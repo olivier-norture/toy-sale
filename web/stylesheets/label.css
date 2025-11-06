@@ -5,7 +5,7 @@ html, body {
 }
 
 @page {
-    size: 62mm 80mm;
+    size: 62mm 65mm;
     margin: 0 !important;
 }
 
@@ -16,7 +16,7 @@ body {
 
 .label-container {
     width: 62mm;
-    height: 80mm;
+    height: 65mm;
     display: flex;
     flex-direction: column;
     padding: 1em;
