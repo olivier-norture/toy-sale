@@ -62,6 +62,19 @@ class RestitutionJouet extends Page{
      * 
      */
     protected function pageProcess(){
+        if (!empty($_POST['action']) && $_POST['action'] == 'search_participant' && !empty($_POST['ref_participant'])) {
+            $participant = \classes\db\object\Participant::searchByRef($_POST['ref_participant']);
+            if (!$participant->isEmpty()) {
+                $this->getSession()->saveParticipant($participant);
+                $this->getSession()->saveBill(new \classes\db\object\Bill());
+                // After changing participant, we redirect to the same page to avoid form resubmission on refresh
+                header("Location: " . \classes\config\Constants::$PAGE_RESTITUTION);
+                exit();
+            } else {
+                $this->setErrorMessage("Aucun participant trouvé avec cette référence.");
+            }
+        }
+
         $this->init();
         
         //If the user do an action
