@@ -52,6 +52,10 @@ $page->process();
                             <fieldset>                            
                                 <ol>
                                     <li>
+                                        <label for="ref">Référence</label> 
+                                        <input type="text" name="ref" id="ref" value="<?php echo $page->getVendeur()->getRef(); ?>" />
+                                    </li>
+                                    <li>
                                         <label for="nom">Nom</label> 
                                         <input type="text" name="nom"id="nom" value="<?php echo $page->getVendeur()->getNom(); ?>" />
                                     </li>

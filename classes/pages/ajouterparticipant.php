@@ -111,8 +111,18 @@ class AjouterParticipant extends Page {
         if (isset($_POST["action"])) {
 
             //Search
-            if ($_POST["action"] == "search" && !empty($_POST["nom"]) && !empty($_POST["prenom"])) {
-                $this->search();
+            if ($_POST["action"] == "search") {
+                if (!empty($_POST["ref"])) {
+                    $this->vendeur = \classes\db\object\Participant::searchByRef($_POST["ref"]);
+                    if($this->vendeur->isEmpty()){
+                        $vendeur = new \classes\db\object\Participant();
+                        $vendeur->setRef($_POST['ref']);
+                        $this->vendeur = $vendeur;
+                    }
+                    $this->getSession()->saveParticipant($this->vendeur);
+                } else if (!empty($_POST["nom"]) && !empty($_POST["prenom"])) {
+                    $this->search();
+                }
             }
 
             //Add
@@ -130,14 +140,14 @@ class AjouterParticipant extends Page {
             if($_POST["action"] == "depot"){
                 //Save eventually modifications if user doesn't uses the other saving button
                 $this->add();
-                header("Location: ".Constants::getPath(Constants::$PAGE_DEPOT));
+                header("Location: ".\classes\config\Constants::getPath(\classes\config\Constants::$PAGE_DEPOT));
             }
             
             //Continue to page "Vente"
             if($_POST["action"] == "vente"){
                 //Save eventually modifications if user doesn't uses the other saving button
                 $this->add();
-                header("Location: ". Constants::getPath(Constants::$PAGE_VENTE));
+                header("Location: ". \classes\config\Constants::getPath(\classes\config\Constants::$PAGE_VENTE));
                 die;
             }
             
@@ -145,13 +155,13 @@ class AjouterParticipant extends Page {
             if($_POST["action"] == "restitution"){
                 //Save eventually modifications if user doesn't uses the other saving button
                 $this->add();
-                header("Location: ". Constants::getPath(Constants::$PAGE_RESTITUTION));
+                header("Location: ". \classes\config\Constants::getPath(\classes\config\Constants::$PAGE_RESTITUTION));
                 die;
             }
             
             //Continue to page "Utilisateur"
             if($_POST["action"] == "utilisateur"){
-                header("Location: ". Constants::getPath(Constants::$PAGE_AJOUT_UTILISATEUR));
+                header("Location: ". \classes\config\Constants::getPath(\classes\config\Constants::$PAGE_AJOUT_UTILISATEUR));
                 die;
             }
         }
@@ -159,7 +169,7 @@ class AjouterParticipant extends Page {
         if($this->vendeur->getId() != ""){
             $this->participantFind = true;
             $this->showWarning = false;
-        } else if($this->vendeur->getNom () != "" || $this->vendeur->getPnom () != ""){
+        } else if($this->vendeur->getNom () != "" || $this->vendeur->getPnom () != "" || !empty($this->vendeur->getRef())){
             $this->participantFind = false;
             $this->showWarning = true;
         } else{
