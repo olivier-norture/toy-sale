@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Print Layout - 10 Toys</title>
+    <link rel="stylesheet" type="text/css" href="../web/stylesheets/main.css" />
+    <link rel="stylesheet" type="text/css" href="../web/stylesheets/style.css" />
+    <script src="../web/js/script.js"></script>
+</head>
+<body>
+    <div class="onlyPrintable print-header">
+        <div style="float left; display: inline-block">
+            <img src="../web/images/logo.png"/>
+        </div>
+        <div style="float: right; display: inline-block;">
+            <p>
+                <span class="bold_text">Bourse aux Jouets Chambly</span><br />
+                <span class="italic_text">Association loi 1901</span><br />
+                60230 Chambly
+            </p>
+        </div>
+    </div>
+    
+    <div id="main_content">
+        <div id="contact_area">
+            <div class="container">
+                <div style="float: right;">
+                    <label class="labelInfoTitle labelInfo">Facture N° : TEST-001</label>
+                </div>
+                <h2 id="contact">DÉPÔT</h2>
+                
+                <div id="contact_info" class="print-participant-info">
+                    <p><strong>Participant:</strong> Test User</p>
+                    <p><strong>Téléphone:</strong> 0123456789</p>
+                    <p><strong>Date:</strong> 05/11/2025</p>
+                </div>
+                
+                <div class="print-content-group">
+                    <table class="print-table-section">
+                        <thead class="print-table-header">
+                            <tr>
+                                <td id="entete_tableau"><label class="reference">RÉFÉRENCE</label></td>
+                                <td id="entete_tableau" style="width: 100%;"><label>DESCRIPTION</label></td>
+                                <td id="entete_tableau"><label class="prix">PRIX (€)</label></td>
+                            </tr>
+                        </thead>
+                        <tbody><tr>
+                <td>A001</td>
+                <td><textarea class="textarea">Voiture télécommandée rouge Ferrari avec télécommande</textarea></td>
+                <td>5</td>
+            </tr><tr>
+                <td>A002</td>
+                <td><textarea class="textarea">Poupée Barbie avec accessoires et vêtements</textarea></td>
+                <td>8</td>
+            </tr><tr>
+                <td>A003</td>
+                <td><textarea class="textarea">Jeu de construction LEGO château médiéval 500 pièces</textarea></td>
+                <td>12</td>
+            </tr><tr>
+                <td>A004</td>
+                <td><textarea class="textarea">Peluche ours en peluche marron très doux</textarea></td>
+                <td>15</td>
+            </tr><tr>
+                <td>A005</td>
+                <td><textarea class="textarea">Puzzle 1000 pièces paysage montagne</textarea></td>
+                <td>20</td>
+            </tr><tr>
+                <td>A006</td>
+                <td><textarea class="textarea">Jeu de société Monopoly édition classique</textarea></td>
+                <td>25</td>
+            </tr><tr>
+                <td>A007</td>
+                <td><textarea class="textarea">Guitare électrique jouet avec amplificateur</textarea></td>
+                <td>30</td>
+            </tr><tr>
+                <td>A008</td>
+                <td><textarea class="textarea">Set de cuisine jouet avec ustensiles et aliments</textarea></td>
+                <td>35</td>
+            </tr><tr>
+                <td>A009</td>
+                <td><textarea class="textarea">Train électrique avec rails et wagons</textarea></td>
+                <td>40</td>
+            </tr><tr>
+                <td>A010</td>
+                <td><textarea class="textarea">Ballon de football officiel taille 5</textarea></td>
+                <td>45</td>
+            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="print-total-row">
+                                <td id="entete_tableau">Total</td>
+                                <td><label>10 jouet(s)</label></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="onlyPrintable print-footer">
+        <hr/>
+        <div class="signature" style="float: left;">
+            <br /><br />
+            <label>Tout retour d'article ou demande de remboursement doit être effectué avant 17h aujourd'hui.
+            Passé ce délai aucune réclamation ne pourra être effectuée.
+            Nous vous remercions de votre compréhension.</label>
+            <br/><br/>
+            <label>Le : 05/11/2025</label>
+            <br/><br/>
+            <label>A : Chambly</label>
+            <br/><br/><br/>
+            <label>Signature :</label>
+        </div>
+        <div style="float: right; padding-top: 30px;">
+            <img src="../web/images/logo.png"/>
+        </div>
+        <hr/>
+    </div>
+    
+    <script>
+        // Auto-trigger print layout optimization for testing
+        document.addEventListener("DOMContentLoaded", function() {
+            hideNotPrintableElements();
+            hideOnlyPrintableElements(false);
+            optimizePrintLayout();
+            addPrintContentGrouping();
+            optimizeTableForPrint();
+        });
+    </script>
+</body>
+</html>

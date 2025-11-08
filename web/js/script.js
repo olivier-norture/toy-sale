@@ -3,12 +3,15 @@ function sleep(ms){
 }
 
 async function imprimer_page(){
+    // Prepare page for printing
     hideNotPrintableElements();
     hideOnlyPrintableElements(false);
     changeTabHeaderWidth(100);
     removeBorder();
     initTextArea();
     changeFontSize(12);
+    
+    // Simple print - let CSS handle the layout
     window.print();
     await sleep(3000);
 }
@@ -151,3 +154,4 @@ function changeTabHeaderWidth(size){
         list[i].style.width = size + "px";
     }
 }
+

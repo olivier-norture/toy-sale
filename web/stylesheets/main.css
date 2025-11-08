@@ -896,3 +896,106 @@ p#copyright {
     width: 30%;
     float: right;
 }
+
+/* ----- Print-Specific Styling ----- */
+
+@media print {
+    /* Page setup for A4 format */
+    @page {
+        size: A4;
+        margin: 15mm 10mm 15mm 10mm;
+        orphans: 2;
+        widows: 2;
+    }
+    
+    /* Hide non-printable elements */
+    .notPrintable {
+        display: none !important;
+    }
+    
+    /* Show print-only elements */
+    .onlyPrintable {
+        display: block !important;
+    }
+    
+    /* Body and main content adjustments */
+    body {
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+        color: black !important;
+        background: white !important;
+    }
+    
+    /* Basic table styling - keep it simple */
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 11px !important;
+        margin: 0 !important;
+    }
+    
+    /* Table cells */
+    table td, table th {
+        padding: 3px 5px !important;
+        border: 1px solid #ddd !important;
+        vertical-align: top !important;
+        font-size: 11px !important;
+    }
+    
+    /* Header cells - restore original blue color */
+    #entete_tableau {
+        background-color: #CED8F6 !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        padding: 10px 5px !important;
+    }
+    
+    /* Description column - ensure it takes full available width */
+    table td[style*="width: 100%"] {
+        width: 100% !important;
+    }
+    
+    /* Header row - prevent it from appearing alone */
+    table thead tr,
+    table tr:first-child {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+    
+    /* Individual table rows - prevent splitting within a row */
+    table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    
+    /* Total row - keep with previous content */
+    table tr:last-child {
+        page-break-before: avoid;
+        break-before: avoid;
+        font-weight: bold !important;
+        background-color: #f8f8f8 !important;
+    }
+    
+    /* Textarea in table cells */
+    table td textarea {
+        border: none !important;
+        background: transparent !important;
+        resize: none !important;
+        width: 100% !important;
+        font-size: 11px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Footer section - keep together */
+    .signature {
+        page-break-before: avoid;
+        break-before: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        font-size: 11px !important;
+        margin-top: 20px;
+    }
+}
+
+/* ----- End Print-Specific Styling ----- */
