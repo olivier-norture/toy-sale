@@ -53,6 +53,14 @@ $page->process();
                 <?php $page->showBillNumber(); ?>
             </div>
             <h2 id="contact" >RESTITUTION</h2>
+
+            <form action="restitution_jouet.php" method="post" id="search_form">
+                <fieldset>
+                    <label for="ref_participant">Référence participant:</label>
+                    <input type="text" name="ref_participant" id="ref_participant" />
+                    <button type="submit" name="action" value="search_participant">Rechercher</button>
+                </fieldset>
+            </form>
             
             <div id="contact_info">                    
                     <fieldset>

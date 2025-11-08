@@ -62,6 +62,19 @@ class RestitutionJouet extends Page{
      * 
      */
     protected function pageProcess(){
+        if (!empty($_POST['action']) && $_POST['action'] == 'search_participant' && !empty($_POST['ref_participant'])) {
+            $participant = \classes\db\object\Participant::searchByRef($_POST['ref_participant']);
+            if (!$participant->isEmpty()) {
+                $this->getSession()->saveParticipant($participant);
+                $this->getSession()->saveBill(new \classes\db\object\Bill(null, null, 0, 0, 0));
+                // After changing participant, we redirect to the same page to avoid form resubmission on refresh
+                header("Location: " . \classes\config\Constants::$PAGE_RESTITUTION);
+                exit();
+            } else {
+                $this->setErrorMessage("Aucun participant trouvé avec cette référence.");
+            }
+        }
+
         $this->init();
         
         //If the user do an action
@@ -100,7 +113,9 @@ class RestitutionJouet extends Page{
         //Show a message if the current bill isn't active
         if(!$this->bill->isActive()){
             $bill = Bill::search($this->bill->getNewId());
-            $this->setErrorMessage(Constants::$MESSAGE_OLD_BILL . " : '" . $bill->getRef() . "'.");
+            if ($bill) {
+                $this->setErrorMessage(Constants::$MESSAGE_OLD_BILL . " : '" . $bill->getRef() . "'.");
+            }
         }
     }
     
@@ -181,7 +196,7 @@ class RestitutionJouet extends Page{
         }
         
         //Create a new Bill
-        $this->bill = new Bill($basket, Constants::$BILL_TYPE_RESTITUTION, 0, 0, null, true, null, null, $this->acheteur->getId(), $this->getRedacteur()->getId(), $this->getTaxPercent());
+        $this->bill = new Bill($basket, Constants::$BILL_TYPE_RESTITUTION, 0, 0, 0, null, true, null, null, $this->acheteur->getId(), $this->getRedacteur()->getId(), $this->getTaxPercent());
         $this->bill->setLetter($this->getLetter());
         //Check the bill
         if($this->bill->checkSell(false)){

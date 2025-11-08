@@ -156,6 +156,34 @@ class Participant {
         }
     }
 
+    /**
+     * Search in the database for a Participant with a given ref
+     * @param string $ref The ref
+     * @return \classes\db\object\Participant An empty Participant if the method found nothing
+     */
+    public static function searchByRef($ref){
+        $letter = substr($ref, 0, 1);
+        $refNumber = substr($ref, 1);
+
+        $stmt = DB::getConn()->prepare("
+            select p.pk, p.nom, p.prenom, p.adresse, p.cp, p.ville, p.email, p.tel, p.type, p.ref 
+            from participant p
+            join bill b on p.pk=b.customer_pk
+            where p.ref = :ref and b.letter = :letter and b.type = 'depot' and b.active = true
+        ");
+        $stmt->bindValue(':ref', $refNumber, PDO::PARAM_INT);
+        $stmt->bindValue(':letter', $letter, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        $row = $stmt->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT);
+        if($row && $row[0] != ""){
+            return new Participant($row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8], $letter . $row[9]);
+        }
+        else{
+            return new Participant();
+        }
+    }
+
     public function checkBeforeInsert(){
         return !empty($this->nom) && !empty($this->pNom);
     }
