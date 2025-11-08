@@ -6,6 +6,7 @@ use classes\db\DB;
 use classes\utils\Logger;
 use classes\config\Constants;
 use classes\db\object\objetUtils;
+use classes\utils\Date;
 
 class Objet{
     private $pk;
@@ -238,11 +239,11 @@ select pk, designation, prix, date_depot, date_vente, date_restitution,
         if($this->pk == null  && $this->checkBeforeInsert()){
             $stmt = DB::getConn()->prepare("
 insert into objet(designation, prix, vendeur_PK, id, date_depot, letter, ref)
-           values (upper(:description), :prix, :vendeur_PK, :id, STR_TO_DATE(:date_depot, '%d/%m/%Y %T'), :letter, :ref)");
+           values (upper(:description), :prix, :vendeur_PK, :id, :date_depot, :letter, :ref)");
             $stmt->bindValue(":description", $this->description, PDO::PARAM_STR);
             $stmt->bindValue(":prix", $this->prix, PDO::PARAM_LOB);
             $stmt->bindValue(":vendeur_PK", $this->vendeur_PK, PDO::PARAM_INT);
-            $stmt->bindValue(":date_depot", empty($this->date_depot) ? null : $this->date_depot);
+            $stmt->bindValue(":date_depot", Date::format_to_sql($this->date_depot));
             $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
             $stmt->bindValue(":letter", $this->letter, PDO::PARAM_STR);
             $stmt->bindValue(":ref", $this->ref, PDO::PARAM_STR);
@@ -255,14 +256,14 @@ insert into objet(designation, prix, vendeur_PK, id, date_depot, letter, ref)
         }
         // Else : UPDATE
         else{
-            $stmt = DB::getConn()->prepare("update objet set designation = upper(:description), prix = :prix, vendeur_PK = :vendeur_PK, date_baj = :date_baj, date_vente = STR_TO_DATE(:date_vente, '%d/%m/%Y %T'), date_restitution = STR_TO_DATE(:date_restitution, '%d/%m/%Y %T'), acheteur_PK = :acheteur_PK, redacteurDepot_PK = :redacteurDepot_PK, redacteurVente_PK = :redacteurVente_PK, redacteurRestitution_PK = :redacteurRestitution_PK where pk = :pk");
+            $stmt = DB::getConn()->prepare("update objet set designation = upper(:description), prix = :prix, vendeur_PK = :vendeur_PK, date_baj = :date_baj, date_vente = :date_vente, date_restitution = :date_restitution, acheteur_PK = :acheteur_PK, redacteurDepot_PK = :redacteurDepot_PK, redacteurVente_PK = :redacteurVente_PK, redacteurRestitution_PK = :redacteurRestitution_PK where pk = :pk");
             $stmt->bindValue(":pk", $this->pk, PDO::PARAM_INT);
             $stmt->bindValue(":description", $this->description, PDO::PARAM_STR);
             $stmt->bindValue(":prix", $this->prix, PDO::PARAM_LOB);
             $stmt->bindValue(":vendeur_PK", $this->vendeur_PK, PDO::PARAM_INT);
             $stmt->bindValue(":date_baj", empty($this->date_baj) ? null : $this->date_baj);
-            $stmt->bindValue(":date_vente", empty($this->date_vente) ? null : $this->date_vente);
-            $stmt->bindValue(":date_restitution", empty($this->date_restitution) ? null : $this->date_restitution);
+            $stmt->bindValue(":date_vente", Date::format_to_sql($this->date_vente));
+            $stmt->bindValue(":date_restitution", Date::format_to_sql($this->date_restitution));
             $stmt->bindValue(":acheteur_PK", $this->acheteur_PK, PDO::PARAM_STR);
             $stmt->bindValue(":redacteurDepot_PK", $this->redacteurDepot_PK, PDO::PARAM_STR);
             $stmt->bindValue(":redacteurVente_PK", $this->redacteurVente_PK, PDO::PARAM_STR);
