@@ -169,7 +169,7 @@ class Participant {
             select p.pk, p.nom, p.prenom, p.adresse, p.cp, p.ville, p.email, p.tel, p.type, p.ref 
             from participant p
             join bill b on p.pk=b.customer_pk
-            where p.ref = :ref and b.letter = :letter and b.type = 'depot' and b.active = true
+            where p.ref = :ref and b.letter = :letter and b.type = 'depot'
         ");
         $stmt->bindValue(':ref', $refNumber, PDO::PARAM_INT);
         $stmt->bindValue(':letter', $letter, PDO::PARAM_STR);
