@@ -18,3 +18,4 @@ This change allows users to search for a participant by their ID (reference) on 
 ## Bug Fixes
 - Fixed a fatal error on the restitution page when searching for a participant. The `Bill` object was created with no arguments, which is not allowed.
 - Fixed a fatal error on the restitution page when an inactive bill was loaded. Added a defensive check to prevent calling a method on a null object.
+- Fixed a bug on the restitution page when printing. An incorrect constructor call for the `Bill` object was causing an "inactive bill" error.
