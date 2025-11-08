@@ -73,7 +73,7 @@ $page->process();
                 <form action="#" method="post" id="contact_form">
 						<fieldset> 
 							<h2 id="jouet">LISTE DES JOUETS VENDU</h2>
-							<table style="width: 100%; display: table;"> <!-- Tableau des jouets à ajouter 10 max -->
+							<table> <!-- Tableau des jouets à ajouter 10 max -->
 								<tr>
 									<td id="entete_tableau" class="reference"> <label for="ref">R&Eacute;F&EacuteRENCE </label> </td>
 									<td id="entete_tableau"> <label for="description">DESCRIPTION</label> </td>
@@ -89,7 +89,7 @@ $page->process();
 					</fieldset>
                                             <fieldset> 
 							<h2 id="jouet">LISTE DES JOUETS INVENDU</h2>
-							<table style="width: 100%; display: table;"> <!-- Tableau des jouets à ajouter 10 max -->
+							<table> <!-- Tableau des jouets à ajouter 10 max -->
 								<tr>
 									<td id="entete_tableau"  class="reference"> <label for="ref">R&Eacute;F&EacuteRENCE </label> </td>
 									<td id="entete_tableau"> <label for="description">DESCRIPTION</label> </td>
@@ -103,7 +103,7 @@ $page->process();
 					</fieldset>
                                             <fieldset> 
 							<h2 id="jouet">BILAN</h2>
-                                                        <table style="width: 100%; text-align: left; display: table;">
+                                                        <table style="width: <?php echo $page->isAdmin() ? "600px" : "400px" ?>; text-align: left;">
                                                             <tr>
                                                                 <td id="entete_tableau">Nombre de jouets restitués</td>
                                                                 <td style="text-align: right;"><?php echo $page->getNbItemUnselled(); ?></td>
