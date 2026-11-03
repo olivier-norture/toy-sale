@@ -57,7 +57,7 @@ where   id = :id
                     ");
             $stmt->bindValue(":letter", $this->letter, PDO::PARAM_STR);
             $stmt->bindValue(":ip", $this->ip, PDO::PARAM_STR);
-            $stmt->bindValue(":counter", $this->counter, PDO::PARAM_STR);
+            $stmt->bindValue(":counter", (int) $this->counter, PDO::PARAM_INT);
             $stmt->bindValue(":id", $this->id, PDO::PARAM_STR);
             
             
