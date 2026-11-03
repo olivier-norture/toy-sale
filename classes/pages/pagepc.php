@@ -20,7 +20,7 @@ class PagePC extends Page {
     private function createPc() {        
         $letter = !empty($_POST['letter']) ? strtoupper($_POST["letter"]) : "";
         $ip = !empty($_POST['ip']) ? $_POST["ip"] : "";
-        $counter = !empty($_POST['counter']) ? strtoupper($_POST["counter"]) : "";
+        $counter = isset($_POST['counter']) && $_POST['counter'] !== '' ? (int) $_POST['counter'] : 0;
         
         $pc = new PC(null, $ip, $letter, $counter);
         $pc->save();
@@ -64,7 +64,7 @@ class PagePC extends Page {
             $id = !empty($_POST['id']) ? $_POST["id"] : null;
             $letter = !empty($_POST['letter']) ? strtoupper($_POST["letter"]) : "";
         $ip = !empty($_POST['ip']) ? $_POST["ip"] : "";
-        $counter = !empty($_POST['counter']) ? strtoupper($_POST["counter"]) : "";
+        $counter = isset($_POST['counter']) && $_POST['counter'] !== '' ? (int) $_POST['counter'] : 0;
         $pc = new PC($id, $ip, $letter, $counter);
             
             switch($_POST["action"])
