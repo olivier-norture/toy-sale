@@ -84,6 +84,8 @@ class PagePC extends Page {
  default :
   break;
 }
+            // Reload the current PC so a change to its letter/counter is visible right away
+            $this->initPc();
         }
     }
     

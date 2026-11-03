@@ -212,13 +212,14 @@ abstract class Page{
         return $this->session->getUser();
     }
     
-    private function initPc(){
-        $this->pc = $this->session->getPc();
-        
-        if($this->pc == null){
-            $this->pc = PC::search(array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER) ? explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0] : $_SERVER['REMOTE_ADDR']);
-            $this->session->savePc($this->pc);
-        }
+    /**
+     * Load the current PC from the database (by client IP) and store it in session.
+     * Always reloaded so that changes made on the PC page (letter, counter)
+     * are visible immediately, without having to disconnect.
+     */
+    protected function initPc(){
+        $this->pc = PC::search(array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER) ? explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0] : $_SERVER['REMOTE_ADDR']);
+        $this->session->savePc($this->pc);
     }
     
     public function getLetter(){
