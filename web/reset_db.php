@@ -12,6 +12,7 @@ spl_autoload_register(function ($class) {
 });
 
 $page = new classes\pages\ResetDB();
+$page->process(false);
 
 ?>
 
@@ -23,22 +24,51 @@ $page = new classes\pages\ResetDB();
         <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" />
         <link rel="stylesheet" type="text/css" href="stylesheets/main.css" />
         <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
-        
+
         <script type="text/javascript">
             window.onload = function(){
+                var pwd = document.getElementById("password");
+                if (pwd) pwd.focus();
             }
         </script>
     </head>
     <body>
 
-        <?php $page->renderTemplateHeader(); 
+        <?php $page->renderTemplateHeader(); ?>
 
+        <div id="main_content"> <!-- main_content -->
 
-echo "Reset Database...<br /><br /><br />";
+            <div id="contact_area"> <!-- #contact_area -->
 
-// $page->reset();
+                <div class="container"> <!-- .container -->
 
- $page->renderTemplateFooter(); ?>
+                    <h2 id="contact">Réinitialiser la base</h2>
+                    <?php classes\template\TemplateManager::renderTemplate(\classes\template\TemplateList::$ALERT_MESSAGE, $page) ?>
+
+                    <?php if ($page->isResetDone()) { ?>
+                        <p><strong>La base a été réinitialisée.</strong></p>
+                    <?php } else { ?>
+                        <p>Cette action supprime <strong>définitivement</strong> tous les jouets et toutes les factures,
+                        remet à zéro les compteurs des PCs et efface les références des participants.</p>
+                        <p>Les participants et les utilisateurs sont conservés.</p>
+                        <br />
+                        <form action="reset_db.php" method="post" id="reset_db_form"
+                              onsubmit="return confirm('Êtes-vous sûr de vouloir TOUT SUPPRIMER ? Cette action est irréversible.');">
+                            <fieldset>
+                                <label for="password">Pour confirmer, saisissez votre mot de passe :</label>
+                                <input type="password" name="password" id="password" autocomplete="current-password" required="required" />
+                                <button name="action" type="submit" value="reset">Réinitialiser la base</button>
+                            </fieldset>
+                        </form>
+                    <?php } ?>
+
+                </div> <!-- END .container -->
+
+            </div> <!-- END #contact_area -->
+
+        </div> <!-- END #main_content -->
+
+        <?php $page->renderTemplateFooter(); ?>
 
 </body>
 </html>
