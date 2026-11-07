@@ -82,6 +82,7 @@ $page->process();
                                         if(isset($_GET['restitution'])){
                                             echo "
                                             <button onclick=\"location.href='restitution_envelope.php'\" type=\"button\">Publipostage restitution</button>
+                                            <button onclick=\"location.href='restitution_all.php'\" type=\"button\">Imprimer toutes les restitutions</button>
                                             ";
                                         }
                                     ?>
