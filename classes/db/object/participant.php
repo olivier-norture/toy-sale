@@ -332,13 +332,11 @@ where   pk = :pk
                 participant.tel, 
                 participant.type, 
                 participant.ref,
-                bill.letter
+                objet.letter
             from participant
-            join bill on (bill.customer_pk = participant.pk)
-            where lower(bill.type) = 'depot'
-             and bill.active = true
-             and participant.ref is not null
-            order by bill.letter asc, participant.ref asc
+            join objet on (objet.vendeur_PK = participant.pk)
+            where participant.ref is not null
+            order by objet.letter asc, participant.ref asc
         ");
         $stmt->execute();
         foreach($stmt->fetchAll() as $row){
