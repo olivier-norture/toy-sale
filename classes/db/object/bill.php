@@ -225,6 +225,28 @@ class Bill {
         return Bill::search($result["id"]);
     }
     
+    /**
+     * Retrieve the last active bill of the given type for the given customer
+     * @param int $customerPk The customer's PK
+     * @param string $type The bill's type
+     * @return Bill|null
+     */
+    public static function searchLastActiveFromCustomer($customerPk, $type){
+        $stmt = DB::getConn()->prepare("select max(id) as id
+                                          from bill
+                                         where active = true
+                                           and customer_pk = :customer_pk
+                                           and type = :type");
+        $stmt->bindValue(":customer_pk", $customerPk);
+        $stmt->bindValue(":type", $type);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        if (empty($result) || empty($result['id'])) {
+            return null;
+        }
+        return Bill::search($result["id"]);
+    }
+
     public static function updateBill($oldBillID, $newBillID){
         $stmt = DB::getConn()->prepare("update bill
                                            set active = false,

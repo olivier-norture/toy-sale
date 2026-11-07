@@ -92,7 +92,9 @@ class AjouterParticipant extends Page {
         
         if ($this->vendeur->checkBeforeInsert()) {
             //If it's a new Participant
-            if($this->vendeur->getRef() === null || trim($this->vendeur->getRef()) === '' || $this->vendeur->getRef() == 0){
+            //The ref can be prefixed by a letter (e.g. "B1"), only its number matters here
+            $refNumber = (int) preg_replace('/\D/', '', (string) $this->vendeur->getRef());
+            if($refNumber === 0){
                 //Counter
                 $counter = $this->pc->getNextCounter();
                 $this->pc->setCounter($counter);
@@ -155,7 +157,17 @@ class AjouterParticipant extends Page {
             if($_POST["action"] == "restitution"){
                 //Save eventually modifications if user doesn't uses the other saving button
                 $this->add();
-                header("Location: ". \classes\config\Constants::getPath(\classes\config\Constants::$PAGE_RESTITUTION));
+                $this->getSession()->clearBill();
+                $location = \classes\config\Constants::getPath(\classes\config\Constants::$PAGE_RESTITUTION);
+                //If a restitution was already done for this person, reopen it so the new one replaces it
+                if ($this->vendeur->getId() != "") {
+                    $lastBill = \classes\db\object\Bill::searchLastActiveFromCustomer(
+                        $this->vendeur->getId(), \classes\config\Constants::$BILL_TYPE_RESTITUTION);
+                    if ($lastBill != null) {
+                        $location .= "?facture=" . $lastBill->getPk();
+                    }
+                }
+                header("Location: ". $location);
                 die;
             }
             
