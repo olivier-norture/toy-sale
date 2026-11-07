@@ -67,6 +67,7 @@ $page->process(false);
                             <td id="entete_tableau">STATUS</td>
                             <td id="entete_tableau">NOM</td>
                             <td id="entete_tableau">PR&Eacute;NOM</td>
+                            <td id="entete_tableau">FACTURES</td>
                             <td id="entete_tableau"></td>
                         </tr>
 

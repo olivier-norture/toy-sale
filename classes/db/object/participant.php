@@ -320,6 +320,9 @@ where   pk = :pk
      */
     public static function getSellers(){
         $res = array();
+        // The number comes from the object's ref (like 'B002-001' => 2) because it is never
+        // changed after the deposit, unlike participant.ref which could have been altered.
+        // Fall back to participant.ref when an object has no usable ref.
         $stmt = DB::getConn()->prepare("
             select distinct
                 participant.pk,
@@ -331,12 +334,15 @@ where   pk = :pk
                 participant.email, 
                 participant.tel, 
                 participant.type, 
-                participant.ref,
+                coalesce(
+                    nullif(cast(substring(substring_index(objet.ref, '-', 1), 2) as unsigned), 0),
+                    participant.ref
+                ) as seller_ref,
                 objet.letter
             from participant
             join objet on (objet.vendeur_PK = participant.pk)
             where participant.ref is not null
-            order by objet.letter asc, participant.ref asc
+            order by objet.letter asc, seller_ref asc
         ");
         $stmt->execute();
         foreach($stmt->fetchAll() as $row){

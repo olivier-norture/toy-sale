@@ -4,6 +4,7 @@ namespace classes\pages;
 use classes\db\object\objetUtils;
 use classes\db\object\Objet;
 use classes\db\object\Participant;
+use classes\db\object\Bill;
 use classes\config\Constants;
 
 class Recherche extends Page
@@ -16,6 +17,11 @@ class Recherche extends Page
 
     protected function pageProcess()
     {
+        //Open one of the object's bills (depot, vente or restitution) in its own page
+        if (!empty($_POST["bill"]) && $this->isAdmin()) {
+            $this->openBill($_POST["bill"]);
+        }
+
         if (isset($_POST["action"])) {
 
             if ($_POST["action"] == "search") {
@@ -29,6 +35,56 @@ class Recherche extends Page
                 header("Location: " . Constants::getPath(Constants::$PAGE_DEPOT));
             }
         }
+    }
+
+    /**
+     * Go to the page of the given bill (same behavior as the "Détails" button of the bills' search)
+     */
+    private function openBill($billId)
+    {
+        $bill = Bill::search($billId);
+        if ($bill == null) {
+            return;
+        }
+
+        switch ($bill->getType()) {
+            case Constants::$BILL_TYPE_DEPOT:
+                $page = Constants::$PAGE_DEPOT;
+                break;
+            case Constants::$BILL_TYPE_VENTE:
+                $page = Constants::$PAGE_VENTE;
+                break;
+            case Constants::$BILL_TYPE_RESTITUTION:
+                $page = Constants::$PAGE_RESTITUTION;
+                break;
+            default:
+                return;
+        }
+
+        $this->getSession()->saveParticipant(Participant::searchFromPk($bill->getCustomerPk()));
+        header("Location: " . Constants::getPath($page) . "?facture=" . $bill->getPk());
+        die;
+    }
+
+    /**
+     * Buttons to open the latest active bill of the object for each type (depot, vente, restitution)
+     */
+    private function renderBills($object)
+    {
+        $types = array(
+            Constants::$BILL_TYPE_DEPOT => "Dépôt",
+            Constants::$BILL_TYPE_VENTE => "Vente",
+            Constants::$BILL_TYPE_RESTITUTION => "Restitution",
+        );
+
+        $html = "";
+        foreach ($types as $type => $label) {
+            $bill = Bill::searchLastActiveFromObjet($object->getPk(), $type);
+            if ($bill != null) {
+                $html .= '<button type="submit" name="bill" value="' . $bill->getPk() . '" title="' . $bill->getRef() . '" style="display: block; white-space: nowrap; margin: 2px 0;">' . $label . ' ' . $bill->getRef() . '</button>';
+            }
+        }
+        return $html;
     }
 
     private function findAll($ref, $description)
@@ -48,11 +104,12 @@ class Recherche extends Page
             <form action="#" method="post" id="contact_form">
             <input type="text" name="ref" style="display: none" value="' . $object->getRef() . '"/>
             <td>' . $object->getRef() . '</td>
-            <td style="width: 100%;">' . $object->getDescription() . '</td>
+            <td style="width: 30%;">' . $object->getDescription() . '</td>
             <td>' . $object->getPrix() . '</td>
             <td>' . $object->getState() . '</td>
             <td>' . $seller->getNom() . '</td>
             <td>' . $seller->getPnom() . '</td>
+            <td>' . ($this->isAdmin() ? $this->renderBills($object) : '') . '</td>
             <td>';
             if($object->getState() == Objet::$EN_VENTE && $this->isAdmin()){
                 $html .= '<button type="submit" name="action" value="details">Modifier</button>';
