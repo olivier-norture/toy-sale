@@ -162,17 +162,29 @@ class Participant {
      * @return \classes\db\object\Participant An empty Participant if the method found nothing
      */
     public static function searchByRef($ref){
+        $ref = trim($ref);
+
+        //An object ref like "B1-1" or "B001-001": find the object's vendor
+        if (strpos($ref, \classes\config\Constants::$REF_SEPARATOR) !== false) {
+            return self::searchByObjectRef($ref);
+        }
+
         $letter = substr($ref, 0, 1);
         $refNumber = substr($ref, 1);
 
         $stmt = DB::getConn()->prepare("
             select p.pk, p.nom, p.prenom, p.adresse, p.cp, p.ville, p.email, p.tel, p.type, p.ref 
             from participant p
-            join bill b on p.pk=b.customer_pk
-            where p.ref = :ref and b.letter = :letter and b.type = 'depot'
+            where p.ref = :ref
+              and (
+                exists (select 1 from bill b where b.customer_pk = p.pk and b.letter = :letter1)
+                or exists (select 1 from objet o where o.vendeur_PK = p.pk and o.letter = :letter2)
+              )
+            limit 1
         ");
         $stmt->bindValue(':ref', $refNumber, PDO::PARAM_INT);
-        $stmt->bindValue(':letter', $letter, PDO::PARAM_STR);
+        $stmt->bindValue(':letter1', $letter, PDO::PARAM_STR);
+        $stmt->bindValue(':letter2', $letter, PDO::PARAM_STR);
         $stmt->execute();
         
         $row = $stmt->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT);
@@ -182,6 +194,36 @@ class Participant {
         else{
             return new Participant();
         }
+    }
+
+    /**
+     * Search for the vendor of the object with the given ref (like "B1-1" or "B001-001")
+     * @param string $objectRef The object's ref
+     * @return \classes\db\object\Participant An empty Participant if the method found nothing
+     */
+    private static function searchByObjectRef($objectRef){
+        $parts = explode(\classes\config\Constants::$REF_SEPARATOR, $objectRef);
+        if (count($parts) !== 2 || $parts[0] === '' || $parts[1] === '') {
+            return new Participant();
+        }
+        $formatted = \classes\db\object\ObjetUtils::formatRef($objectRef);
+
+        $stmt = DB::getConn()->prepare("
+            select p.pk, p.nom, p.prenom, p.adresse, p.cp, p.ville, p.email, p.tel, p.type, p.ref, o.letter
+            from objet o
+            join participant p on p.pk = o.vendeur_PK
+            where o.ref = :formatted or o.ref = :raw
+            limit 1
+        ");
+        $stmt->bindValue(':formatted', $formatted, PDO::PARAM_STR);
+        $stmt->bindValue(':raw', $objectRef, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_NUM);
+        if ($row && $row[0] != "") {
+            return new Participant($row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8], $row[10] . $row[9]);
+        }
+        return new Participant();
     }
 
     public function checkBeforeInsert(){
@@ -201,7 +243,7 @@ values (UPPER(:nom), UPPER(:prenom), UPPER(:adresse), :cp, UPPER(:ville), UPPER(
             $stmt->bindValue(":email", $this->email, PDO::PARAM_STR);
             $stmt->bindValue(":tel", $this->tel, PDO::PARAM_STR);
             $stmt->bindValue(":type", $this->type, PDO::PARAM_INT);
-            $stmt->bindValue(":ref", $this->ref, PDO::PARAM_INT);
+            $stmt->bindValue(":ref", (int) preg_replace('/\D/', '', (string) $this->ref), PDO::PARAM_INT);
 
             DB::getConn()->beginTransaction();
             $stmt->execute();
@@ -232,7 +274,7 @@ where   pk = :pk
             $stmt->bindValue(":tel", $this->tel, PDO::PARAM_STR);
             $stmt->bindValue(":type", $this->type, PDO::PARAM_STR);
             $stmt->bindValue(":pk", $this->id, PDO::PARAM_INT);
-            $stmt->bindValue(":ref", $this->ref, PDO::PARAM_INT);
+            $stmt->bindValue(":ref", (int) preg_replace('/\D/', '', (string) $this->ref), PDO::PARAM_INT);
             
             DB::getConn()->beginTransaction();
             $stmt->execute();

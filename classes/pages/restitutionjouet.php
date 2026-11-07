@@ -105,7 +105,12 @@ class RestitutionJouet extends Page{
         else if(!empty($_GET["facture"])){
             Logger::log("restitutionjouet", "DEBUG", "Loading facture '" . $_GET["facture"] . "'");
             $this->bill = Bill::search($_GET["facture"]);
-            $this->setRedacteur(Participant::searchFromPk($this->bill->getRedactorPk()));
+            //Only show the old bill's redactor when it can be found, otherwise keep the logged user
+            //(an empty redactor makes the new bill's insertion fail)
+            $oldRedacteur = $this->bill->getRedactorPk() ? Participant::searchFromPk($this->bill->getRedactorPk()) : null;
+            if ($oldRedacteur != null && !$oldRedacteur->isEmpty() && $oldRedacteur->getId() != "") {
+                $this->setRedacteur($oldRedacteur);
+            }
             $this->basket = $this->bill->getBasket();
             $this->getSession()->saveBill($this->bill);
         }
@@ -196,7 +201,16 @@ class RestitutionJouet extends Page{
         }
         
         //Create a new Bill
-        $this->bill = new Bill($basket, Constants::$BILL_TYPE_RESTITUTION, 0, 0, 0, null, true, null, null, $this->acheteur->getId(), $this->getRedacteur()->getId(), $this->getTaxPercent());
+        //The redactor: the one in session, otherwise the logged user's participant, otherwise the old bill's one
+        $redactorPk = $this->getRedacteur()->getId();
+        if (empty($redactorPk)) {
+            $redactorPk = $this->getSession()->getUser()->getParticpant_id();
+        }
+        if (empty($redactorPk)) {
+            $redactorPk = $oldBill != null ? $oldBill->getRedactorPk() : null;
+        }
+        $redactorPk = empty($redactorPk) ? null : $redactorPk;
+        $this->bill = new Bill($basket, Constants::$BILL_TYPE_RESTITUTION, 0, 0, 0, null, true, null, null, $this->acheteur->getId(), $redactorPk, $this->getTaxPercent());
         $this->bill->setLetter($this->getLetter());
         //Check the bill
         if($this->bill->checkSell(false)){
