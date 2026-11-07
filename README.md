@@ -78,6 +78,21 @@ Run it using
 nix-develop
 ```
 
+## Fake data (to simulate big prints)
+
+Generate 120 fake participants with 4000 toys (about 40% sold), to test the prints
+(`restitution_all.php`, `restitution_envelope.php`, ...):
+```sh
+docker compose exec -T db mysql -uroot -prootpassword bourseauxjouets < misc/fakeData.sql
+```
+
+Remove all the fake data (only rows linked to the `@fake.test` participants are deleted):
+```sh
+docker compose exec -T db mysql -uroot -prootpassword bourseauxjouets < misc/fakeDataCleanup.sql
+```
+
+Running the generator twice adds a second batch: clean up first if you don't want that.
+
 ## How to run tests
 
 This project uses PHPUnit for testing. To run the tests, you need to be in the Nix development environment.
