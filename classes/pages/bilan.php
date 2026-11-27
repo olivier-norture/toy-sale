@@ -8,51 +8,25 @@ use classes\db\DB;
 use PDO;
 
 class Bilan extends Page{
-    
+
+    private $restitutionRows = null;
+
     protected function pageProcess() {
-        
+
     }
-    
-    public function getTotalDeposant(){
-        $stmt = DB::getConn()->prepare("select count(distinct(vendeur_PK)) as total from objet");
-        $stmt->execute();
-        return $stmt->fetch()["total"];
-    }
-    
-    public function getTotalSellers(){
-        $stmt = DB::getConn()->prepare("select count(distinct(acheteur_PK)) as total from objet");
-        $stmt->execute();
-        return $stmt->fetch()["total"];
-    }
-    
-    public function getTotalObjects(){
-        $stmt = DB::getConn()->prepare("select count(distinct(pk)) as total from objet where vendeur_PK is not null");
-        $stmt->execute();
-        return $stmt->fetch()["total"];
-    }
-    
-    public function getTotalObjectsSelled(){
-        $stmt = DB::getConn()->prepare("select count(distinct(pk)) as total from objet where acheteur_PK is not null");
-        $stmt->execute();
-        return $stmt->fetch()["total"];
-    }
-    
-    public function getTotalObjetcsSelledMoney(){
-        $stmt = DB::getConn()->prepare("select sum(prix) as total from objet where acheteur_PK is not null;");
-        $stmt->execute();
-        return $stmt->fetch()["total"] . " €";
-    }
-    
-    public function exportCsv(){
-        $stmt = DB::getConn()->prepare("
+
+    // Single source of truth for the page totals and the CSV export.
+    public function getRestitutionRows(){
+        if ($this->restitutionRows === null) {
+            $stmt = DB::getConn()->prepare("
 SELECT participant.REF, participant.NOM, participant.PRENOM,
        participant.VILLE, participant.EMAIL, participant.TEL,
        COALESCE(invendu.nbObjetInvendu, 0) as nbObjetInvendu,
        COALESCE(vendu.nbObjetVendu, 0) as nbObjetVendu,
        COALESCE(vendu.total, 0) as totalVente,
        bill.tax as commissionTaux,
-       COALESCE(vendu.total * (bill.tax / 100), 0) as commission,
-       COALESCE(vendu.total * ( (100 - bill.tax) / 100), 0) as totalRendu
+       ROUND(COALESCE(vendu.total * (bill.tax / 100), 0), 2) as commission,
+       ROUND(COALESCE(vendu.total * ( (100 - bill.tax) / 100), 0), 2) as totalRendu
     FROM bill
   JOIN participant ON (participant.PK = bill.customer_pk)
   LEFT JOIN (
@@ -78,16 +52,58 @@ WHERE bill.id IN (
 )
 ;
 ");
-        $stmt->execute();
+            $stmt->execute();
+            $this->restitutionRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $this->restitutionRows;
+    }
+
+    public function getTotalDeposant(){
+        return count($this->getRestitutionRows());
+    }
+
+    public function getTotalSellers(){
+        $count = 0;
+        foreach ($this->getRestitutionRows() as $row) {
+            if ((int) $row["nbObjetVendu"] > 0) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    public function getTotalObjects(){
+        $total = 0;
+        foreach ($this->getRestitutionRows() as $row) {
+            $total += (int) $row["nbObjetInvendu"] + (int) $row["nbObjetVendu"];
+        }
+        return $total;
+    }
+
+    public function getTotalObjectsSelled(){
+        $total = 0;
+        foreach ($this->getRestitutionRows() as $row) {
+            $total += (int) $row["nbObjetVendu"];
+        }
+        return $total;
+    }
+
+    public function getTotalObjetcsSelledMoney(){
+        $total = 0.0;
+        foreach ($this->getRestitutionRows() as $row) {
+            $total += (float) $row["totalVente"];
+        }
+        return number_format($total, 2) . " €";
+    }
+
+    public function exportCsv(){
         $list = array();
         $list[] = array("reference", "nom", "prenom", "ville", "email", "tel", "nbObjetInvendu",
                         "nbObjetVendu", "totalVente", "commissionTaux", "commission", "totalRendu");
-        if($stmt->rowCount() > 0){
-            foreach($stmt->fetchAll(PDO::FETCH_NUM) as $row){
-                $list[] = $row;
-            }
+        foreach ($this->getRestitutionRows() as $row) {
+            $list[] = array_values($row);
         }
-        
+
         $fp = fopen(Constants::$RESTITUTION_BILAN_CSV_PATH, 'w');
 
         foreach ($list as $fields) {
@@ -95,7 +111,7 @@ WHERE bill.id IN (
         }
         flush();
         fclose($fp);
-        
+
         return $list;
     }
 
