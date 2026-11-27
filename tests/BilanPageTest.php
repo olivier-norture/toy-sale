@@ -28,11 +28,12 @@ class BilanPageTest extends TestCase
         );
     }
 
-    private function buildPage(array $rows, $prepareCalls = 1)
+    private function buildPage(array $rows, $prepareCalls = 2, $buyers = 2)
     {
         $this->mockPdoStatement = $this->createMock(PDOStatement::class);
         $this->mockPdoStatement->method('execute')->willReturn(true);
         $this->mockPdoStatement->method('fetchAll')->willReturn($rows);
+        $this->mockPdoStatement->method('fetchColumn')->willReturn($buyers);
 
         $this->mockPdo = $this->createMock(PDO::class);
         $this->mockPdo->expects($this->exactly($prepareCalls))->method('prepare')->willReturn($this->mockPdoStatement);
@@ -50,7 +51,7 @@ class BilanPageTest extends TestCase
 
     public function testTotalsFromRestitutionRows()
     {
-        $page = $this->buildPage($this->fixtureRows(), 1);
+        $page = $this->buildPage($this->fixtureRows(), 2, 2);
 
         $this->assertSame(3, $page->getTotalDeposant());
         $this->assertSame(2, $page->getTotalSellers());
@@ -63,6 +64,7 @@ class BilanPageTest extends TestCase
     {
         $page = $this->buildPage($this->fixtureRows(), 1);
         $list = $page->exportCsv();
+        $this->assertSame(3, $page->getTotalDeposant());
         $body = array_slice($list, 1);
 
         $sum = function ($index) use ($body) {
@@ -77,7 +79,7 @@ class BilanPageTest extends TestCase
 
     public function testEmptyRestitution()
     {
-        $page = $this->buildPage(array(), 1);
+        $page = $this->buildPage(array(), 2, 0);
 
         $this->assertSame(0, $page->getTotalDeposant());
         $this->assertSame(0, $page->getTotalSellers());
@@ -86,11 +88,14 @@ class BilanPageTest extends TestCase
         $this->assertSame("0.00 €", $page->getTotalObjetcsSelledMoney());
     }
 
-    public function testQueryRunOncePerRequest()
+    // Two prepares expected: one for the restitution rows, one for the buyer count, each run once.
+    public function testQueriesRunOncePerInstance()
     {
-        $page = $this->buildPage($this->fixtureRows(), 1);
+        $page = $this->buildPage($this->fixtureRows(), 2, 2);
 
         $page->getTotalDeposant();
+        $page->getTotalSellers();
+        $page->getTotalSellers();
         $page->getTotalObjects();
         $page->getTotalObjetcsSelledMoney();
         $page->exportCsv();

@@ -10,6 +10,7 @@ use PDO;
 class Bilan extends Page{
 
     private $restitutionRows = null;
+    private $totalBuyers = null;
 
     protected function pageProcess() {
 
@@ -62,14 +63,26 @@ WHERE bill.id IN (
         return count($this->getRestitutionRows());
     }
 
+    // Distinct buyers of the objects in the same restitution bills as the export rows.
     public function getTotalSellers(){
-        $count = 0;
-        foreach ($this->getRestitutionRows() as $row) {
-            if ((int) $row["nbObjetVendu"] > 0) {
-                $count++;
-            }
+        if ($this->totalBuyers === null) {
+            $stmt = DB::getConn()->prepare("
+SELECT count(distinct objet.acheteur_PK) as total
+    FROM bill_objects
+    JOIN objet ON (bill_objects.object_id = objet.PK)
+   WHERE objet.acheteur_PK is not null
+     AND bill_objects.bill_id IN (
+  SELECT max(id)
+    FROM bill
+   WHERE bill.`type` = 'RESITUTION'
+     AND bill.active = 1
+    GROUP BY customer_PK
+);
+");
+            $stmt->execute();
+            $this->totalBuyers = (int) $stmt->fetchColumn();
         }
-        return $count;
+        return $this->totalBuyers;
     }
 
     public function getTotalObjects(){
